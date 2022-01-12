@@ -18,6 +18,12 @@ public class PainelController {
 	public String[] ativo() {
 		return new String[] { "painel", "" };
 	}
+	
+	@ModelAttribute("contaService")
+	public String contaService() {
+		return "http://localhost:8080/sindico/contas";
+//		return  "/sindico/contas";
+	}
 
 	@Autowired
 	RelatorioService relatorioService;
@@ -36,3 +42,4 @@ public class PainelController {
 	}
 
 }
+
