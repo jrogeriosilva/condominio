@@ -2,6 +2,7 @@ package app.condominio.service;
 
 
 import java.math.BigDecimal;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.WebUtils;
 
@@ -98,7 +100,7 @@ public class ContaServiceMicroserviceImpl implements ContaService {
 		if (condominio == null) {
 			return BigDecimal.ZERO.setScale(2);
 		} else {
-            HttpEntity formEntity = new HttpEntity<MultiValueMap<String, String>>(null, buildHeadersRequest());
+			HttpEntity formEntity = new HttpEntity<MultiValueMap<String, String>>(null, buildHeadersRequest());
             ResponseEntity<ContasResponse.SaldoAtual>  response = restTemplate.exchange(
             												contasService + "/condominio/saldo/atual", 
             												HttpMethod.GET, formEntity, ContasResponse.SaldoAtual.class);
