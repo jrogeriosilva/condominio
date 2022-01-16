@@ -46,6 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		  	.tokenValiditySeconds(120960)
 		.and().csrf();
 		// @formatter:on
+		
+		http.authorizeRequests().antMatchers("/conta/**").hasIpAddress("127.0.0.1");
+		http.csrf().ignoringAntMatchers("/conta/usuario/password");
 	}
 
 	@Override

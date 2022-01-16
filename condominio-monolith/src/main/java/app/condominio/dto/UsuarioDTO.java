@@ -6,6 +6,7 @@ public class UsuarioDTO {
 	private String sobrenome;
 	private String email;
 	private Long condominio;
+	private String senha;
 
 	public String getUserName() {
 		return userName;
@@ -45,5 +46,13 @@ public class UsuarioDTO {
 
 	public void setCondominio(Long condominio) {
 		this.condominio = condominio;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 }

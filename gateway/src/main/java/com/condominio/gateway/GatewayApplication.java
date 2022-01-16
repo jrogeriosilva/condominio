@@ -23,6 +23,9 @@ public class GatewayApplication {
 						.path("/sindico/contas/**")
 						.uri("http://localhost:8082"))
 				.route(p -> p
+						.path("/conta/redefinir")
+						.uri("http://localhost:8083"))
+				.route(p -> p
 						.path("/**")
 						.uri("http://localhost:8081"))
 				.route(p -> p
