@@ -73,8 +73,8 @@
 						</li>
 <!--						<p th:text="${#ctx.tipo}">adsa</p>-->
 <!--						<p th:text="${T(com.condominio.contas.domain.enums.TipoConta).BC}">adsa3</p>-->
-<!--						<p th:if="${#ctx.tipo} == ${T(com.condominio.contas.domain.enums.TipoConta).BC}">true</p>-->
-						<li class="list-group-item collapse show" id="BC" th:if="${#ctx.tipo} == ${T(com.condominio.contas.domain.enums.TipoConta).BC}">
+<!--						<p th:text="${#ctx.tipo.equals(T(com.condominio.contas.domain.enums.TipoConta).BC.toString)}">true</p>-->
+						<li class="list-group-item collapse show" id="BC" th:if="${#ctx.tipo.equals(T(com.condominio.contas.domain.enums.TipoConta).BC.toString)}">
 							<p class="text-primary">
 								<i class="fas fa-university"></i> Dados da conta bancária
 							</p>
@@ -108,7 +108,7 @@
 								</div>
 							</div>
 						</li>
-						<li class="list-group-item collapse" id="BC" th:unless="${#ctx.tipo} == ${T(com.condominio.contas.domain.enums.TipoConta).BC}">
+						<li class="list-group-item collapse" id="BC" th:unless="${#ctx.tipo.equals(T(com.condominio.contas.domain.enums.TipoConta).BC.toString)}">
 							<p class="text-primary">
 								<i class="fas fa-university"></i> Dados da conta bancária
 							</p>
