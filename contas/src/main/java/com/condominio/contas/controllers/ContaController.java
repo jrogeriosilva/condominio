@@ -70,10 +70,10 @@ public class ContaController {
 		Conta conta = contaService.ler(idConta);
 		if (conta instanceof ContaBancaria) {
 			model.addAttribute("conta", conta);
-			model.addAttribute("tipo", TipoConta.BC);
+			model.addAttribute("tipo", TipoConta.BC.toString());
 		} else {
 			model.addAttribute("conta", conta);
-			model.addAttribute("tipo", TipoConta.CX);
+			model.addAttribute("tipo", TipoConta.CX.toString());
 		}
 		model.addAttribute("conteudo", "contaCadastro");
 		return new ModelAndView("fragmentos/layoutSindico", model);
@@ -86,7 +86,7 @@ public class ContaController {
 		contaService.validar(conta, validacao);
 		if (validacao.hasErrors()) {
 			conta.setIdConta(null);
-			model.addAttribute("tipo", TipoConta.CX);
+			model.addAttribute("tipo", TipoConta.CX.toString());
 			model.addAttribute("conteudo", "contaCadastro");
 			return new ModelAndView("fragmentos/layoutSindico", model);
 		}
@@ -100,7 +100,7 @@ public class ContaController {
 		contaService.validar(conta, validacao);
 		if (validacao.hasErrors()) {
 			conta.setIdConta(null);
-			model.addAttribute("tipo", TipoConta.BC);
+			model.addAttribute("tipo", TipoConta.BC.toString());
 			model.addAttribute("conteudo", "contaCadastro");
 			return new ModelAndView("fragmentos/layoutSindico", model);
 		}
@@ -115,7 +115,7 @@ public class ContaController {
 		System.out.println("asd");
 		contaService.validar(conta, validacao);
 		if (validacao.hasErrors()) {
-			model.addAttribute("tipo", TipoConta.CX);
+			model.addAttribute("tipo", TipoConta.CX.toString());
 			model.addAttribute("conteudo", "contaCadastro");
 			return new ModelAndView("fragmentos/layoutSindico", model);
 		}
@@ -129,7 +129,7 @@ public class ContaController {
 			BindingResult validacao, ModelMap model) {
 		contaService.validar(conta, validacao);
 		if (validacao.hasErrors()) {
-			model.addAttribute("tipo", TipoConta.BC);
+			model.addAttribute("tipo", TipoConta.BC.toString());
 			model.addAttribute("conteudo", "contaCadastro");
 			return new ModelAndView("fragmentos/layoutSindico", model);
 		}
