@@ -24,7 +24,7 @@ public class GatewayApplication {
 						.uri("http://localhost:8082"))
 				.route(p -> p
 						.path("/conta/redefinir")
-						.uri("http://localhost:8083"))
+						.uri("http://localhost:8084"))
 				.route(p -> p
 						.path("/**")
 						.uri("http://localhost:8081"))
