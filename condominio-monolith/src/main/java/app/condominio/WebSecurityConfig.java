@@ -12,11 +12,15 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+import app.condominio.utils.GatewayUtils;
+
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	DataSource dataSource;
+	@Autowired
+	private GatewayUtils gatewayUtils;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -35,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		  	.defaultSuccessUrl("/autenticado")
 		  	.usernameParameter("username").passwordParameter("password")
 		.and().logout()
-			.logoutSuccessUrl("/entrar?sair")
+			.logoutSuccessUrl(gatewayUtils.getUrl() + "/entrar?sair")
 			.logoutUrl("/sair")
 			.invalidateHttpSession(true)
 			.clearAuthentication(true)

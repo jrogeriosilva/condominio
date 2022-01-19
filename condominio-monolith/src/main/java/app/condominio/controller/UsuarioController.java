@@ -132,9 +132,6 @@ public class UsuarioController {
 		Usuario usuario = usuarioService.ler(userName);
 		CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
 		
-		System.out.println(csrfToken.getHeaderName());
-		System.out.println(csrfToken.getToken());
-		
 		if(usuario != null) {
 			
 			usuarioDTO.setUserName(usuario.getUsername());

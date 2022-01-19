@@ -13,11 +13,14 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.servlet.ModelAndView;
 
 import app.condominio.service.RelatorioService;
+import app.condominio.utils.GatewayUtils;
 
 @Controller
 @RequestMapping("/sindico")
 public class PainelController {
-
+	@Autowired
+	private GatewayUtils gatewayUtils;
+	
 	@ModelAttribute("ativo")
 	public String[] ativo() {
 		return new String[] { "painel", "" };
@@ -25,7 +28,7 @@ public class PainelController {
 	
 	@ModelAttribute("contaService")
 	public String contaService() {
-		return "http://localhost:8080/sindico/contas";
+		return gatewayUtils.getUrl() + "/sindico/contas";
 //		return  "/sindico/contas";
 	}
 
@@ -42,7 +45,6 @@ public class PainelController {
 			model.addAttribute("contaServiceConnectErro", false);
 		}catch(RestClientException e) {
 			if(e.getCause() instanceof ConnectException) {
-				System.out.println("instanceof");
 				model.addAttribute("saldoAtual", BigDecimal.ZERO.setScale(2));
 				model.addAttribute("receitaDespesaMes", BigDecimal.ZERO.setScale(2));
 				model.addAttribute("receitaDespesaRealizada", BigDecimal.ZERO.setScale(2));

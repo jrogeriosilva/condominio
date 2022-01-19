@@ -44,6 +44,9 @@
 		<div th:if="${param.erro}">
 			<div class="alert alert-danger">Não localizamos nenhum usuário com este nome em nossa base de dados.</div>
 		</div>
+		<div th:if="${param.sendEmailErro}">
+			<div class="alert alert-danger">Não foi possível enviar o email, porfavor tente mais tarde.</div>
+		</div>
 		<div th:if="${param.invalido}">
 			<div class="alert alert-warning">
 				Este <i>link</i> para redefinição de senha é inválido, expirou ou já foi usado.

@@ -2,9 +2,12 @@ package com.condominio.recuperar_senha_service.service;
 
 
 import com.condominio.recuperar_senha_service.domain.Usuario;
+import com.condominio.recuperar_senha_service.exceptions.EmailMicroServicoConnectRefuseException;
+import com.condominio.recuperar_senha_service.exceptions.UsuarioNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Calendar;
@@ -23,20 +26,28 @@ public class UsuarioService {
         return response.getBody();
     }
 
-    public boolean redefinirSenha(String username) {
-        Usuario usuario = getUsuario(username);
-        if (usuario != null) {
-            String para = usuario.getEmail();
-            String assunto = "Condomínio App - Redefinição de Senha";
-            String mensagem = "Acesse o endereço abaixo para redefinir sua senha:\n\nhttp://localhost:8080/conta/redefinir?username="
-                    + usuario.getUserName() + "&token=" + getToken(usuario.getSenha())
-                    + "\n\nCaso não consiga clicar no link acima, copie-o e cole em seu navegador."
-                    + "\n\nPor segurança este link só é válido até o final do dia.";
-            emailService.enviarEmail(para, assunto, mensagem);
-            return true;
-        } else {
-            return false;
+    public boolean redefinirSenha(String username) throws EmailMicroServicoConnectRefuseException, UsuarioNotFoundException {
+        try{
+            Usuario usuario = getUsuario(username);
+            if (usuario != null) {
+                String para = usuario.getEmail();
+                String assunto = "Condomínio App - Redefinição de Senha";
+                String mensagem = "Acesse o endereço abaixo para redefinir sua senha:\n\nhttp://localhost:8080/conta/redefinir?username="
+                        + usuario.getUserName() + "&token=" + getToken(usuario.getSenha())
+                        + "\n\nCaso não consiga clicar no link acima, copie-o e cole em seu navegador."
+                        + "\n\nPor segurança este link só é válido até o final do dia.";
+
+                emailService.enviarEmail(para, assunto, mensagem);
+
+                return true;
+            }
+        }catch (HttpClientErrorException e) {
+            if(e.getStatusCode() == HttpStatus.BAD_REQUEST) {
+                throw new UsuarioNotFoundException();
+            }
         }
+
+        return false;
     }
 
     public boolean redefinirSenha(String username, String token, String password) {
