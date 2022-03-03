@@ -1,21 +1,31 @@
 package app.condominio.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import app.condominio.domain.Condominio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import app.condominio.domain.Usuario;
+import app.condominio.dto.UsuarioDTO;
 import app.condominio.service.UsuarioService;
 
 @Controller
@@ -24,6 +34,9 @@ public class UsuarioController {
 
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private HttpServletRequest request;
 
 	@ModelAttribute("ativo")
 	public String[] ativo() {
@@ -88,4 +101,62 @@ public class UsuarioController {
 			return "redirect:/conta/redefinir?invalido";
 		}
 	}
+
+	@GetMapping("/usuario/logado")
+	public ResponseEntity<UsuarioDTO> getUsuarioLogado() {
+		UsuarioDTO usuarioDTO =  new UsuarioDTO();
+		Usuario usuario = usuarioService.lerLogado();
+		
+		if(usuario != null) {
+			
+			usuarioDTO.setUserName(usuario.getUsername());
+			usuarioDTO.setNome(usuario.getNome());
+			usuarioDTO.setSobrenome(usuario.getSobrenome());
+			usuarioDTO.setEmail(usuario.getEmail());
+			
+			if(usuario.getCondominio() != null) 
+				usuarioDTO.setCondominio(usuario.getCondominio().getIdCondominio());
+			else 
+				usuarioDTO.setCondominio(null);
+			
+			return ResponseEntity.ok().body(usuarioDTO);
+			
+		}else {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	@GetMapping("/usuario/{userName}/info/redefinir-senha")
+	public ResponseEntity<UsuarioDTO> getUsuarioByUserName(@PathVariable String userName) {
+		UsuarioDTO usuarioDTO =  new UsuarioDTO();
+		Usuario usuario = usuarioService.ler(userName);
+		CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+		
+		if(usuario != null) {
+			
+			usuarioDTO.setUserName(usuario.getUsername());
+			usuarioDTO.setEmail(usuario.getEmail());
+			usuarioDTO.setSenha(usuario.getPassword());
+			
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.set(csrfToken.getHeaderName(), csrfToken.getToken());
+			
+			return ResponseEntity.ok().headers(responseHeaders).body(usuarioDTO);
+			
+		}else {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	@PutMapping("/usuario/password")
+	public ResponseEntity atualizarSenha(@RequestBody UsuarioDTO usuarioDTO) {
+		Usuario usuario = usuarioService.ler(usuarioDTO.getUserName());
+		usuario.setPassword(usuarioDTO.getSenha());
+		usuarioService.editar(usuario);
+		
+		return ResponseEntity.ok().build();
+	}
+
 }
+
+

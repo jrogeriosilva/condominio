@@ -1,5 +1,6 @@
 package app.condominio.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,9 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import app.condominio.utils.GatewayUtils;
+
 @Controller
 public class InicioController {
-
+	@Autowired
+	private GatewayUtils gatewayUtils;
+	
 	@ModelAttribute("ativo")
 	public String[] ativo() {
 		return new String[] { "inicio", "" };
@@ -31,7 +36,7 @@ public class InicioController {
 		String retorno = "redirect:/login?erro";
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("SINDICO"))) {
-			retorno = "redirect:/sindico";
+			retorno = "redirect:" + gatewayUtils.getUrl() + "/sindico";
 		} else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("MORADOR"))) {
 			retorno = "redirect:/morador";
 		} else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {

@@ -26,8 +26,8 @@ import app.condominio.domain.enums.TipoConta;
 import app.condominio.domain.enums.TipoContaBancaria;
 import app.condominio.service.ContaService;
 
-@Controller
-@RequestMapping("sindico/contas")
+//@Controller
+//@RequestMapping("sindico/contas")
 public class ContaController {
 
 	@Autowired

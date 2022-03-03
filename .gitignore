@@ -1,7 +1,12 @@
 /target/
+*/target/
+*/.settings/
 /bin/
 /.settings/
 /.git/
 .classpath
 .project
 /src/main/webapp/
+*/.settings/
+*/target/
+.metadata/

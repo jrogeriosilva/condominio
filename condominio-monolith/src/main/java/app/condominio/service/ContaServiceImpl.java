@@ -16,8 +16,8 @@ import app.condominio.dao.ContaDao;
 import app.condominio.domain.Condominio;
 import app.condominio.domain.Conta;
 
-@Service
-@Transactional
+//@Service
+//@Transactional
 public class ContaServiceImpl implements ContaService {
 
 	@Autowired
@@ -125,3 +125,4 @@ public class ContaServiceImpl implements ContaService {
 	}
 
 }
+
